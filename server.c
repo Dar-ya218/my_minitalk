@@ -19,3 +19,14 @@ void	handle_signal(int signal)
 	else
 		current_char <<= 1;
 }
+
+/*int	main(void)
+{
+	ft_printf("Server PID: %d\n", getpid());
+	ft_printf("Server ready to receive message...\n");
+	signal(SIGUSR1, handle_signal);
+	signal(SIGUSR2, handle_signal);
+	while (1)
+		pause();
+	return (0);
+}*/
