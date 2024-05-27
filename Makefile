@@ -1,15 +1,35 @@
-CLIENT_NAME = client
-SERVER_NAME = server
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dabochko <dabochko@student.42barcel>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/23 15:31:01 by dabochko          #+#    #+#              #
+#    Updated: 2024/03/08 14:14:01 by dabochko         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CLIENT_SRCS = client.c ft_atoi.c
-SERVER_SRCS = server.c
+NAME = libftprintf.a
+SRC = ft_printf.c ft_putchar.c ft_putstr.c ft_putchar.c ft_putnbr.c\
+	ft_putstr.c ft_putunbr.c ft_putnbr.c ft_puthex.c ft_putptr.c
+OBJ = $(SRC:.c=.o)
+CFLAGS = -Wall -Werror -Wextra #-fsanitize=address
 
-OBJS_CLIENT = $(CLIENT_SRCS:.c=.o)
-OBJS_SERVER = $(SERVER_SRCS:.c=.o)
+all: $(NAME)
 
-PRINTF = printf/libftprintf.a
+$(NAME): $(OBJ)
+	ar rcs $(NAME) $(OBJ)
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+%.o:%.c Makefile ft_printf.h
+	gcc $(CFLAGS) -c $< -o $@ 
 
-all: $(CLIENT_NAME) $(SERVER_NAME)
+clean:
+	rm -f $(OBJ)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

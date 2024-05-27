@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dabochko <dabochko@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/20 14:54:13 by dabochko          #+#    #+#             */
-/*   Updated: 2024/03/07 16:08:46 by dabochko         ###   ########.fr       */
+/*   Created: 2024/02/20 14:18:51 by dabochko          #+#    #+#             */
+/*   Updated: 2024/03/07 14:12:21 by dabochko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-
-# define FT_PRINTF_H
-
-# include <stdio.h>
-# include <unistd.h>
-# include <stdarg.h>
-# include <limits.h>
-
-int	ft_printf(const char *format, ...);
-int	ft_putchar(int c);
-int	ft_putstr(char *s);
-int	ft_putnbr(int n);
-int	ft_putunbr(unsigned int n);
-int	ft_puthex(unsigned int n, char const place);
-int	ft_putptr(unsigned long ptr);
-int	ptr_size(unsigned long n);
-
-#endif
+#include "ft_printf.h"
+/*toma un carácter c como argumento y lo escribe en la salida estándar
+utilizando la función write(). write(1, &c, 1) escribe un solo carácter
+(&c) en el descriptor de archivo 1 (que es la salida estándar).*/
+int	ft_putchar(int c)
+{
+	if (write(1, &c, 1) < 0)
+		return (-1);
+	return (1);
+}

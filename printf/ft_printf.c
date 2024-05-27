@@ -6,19 +6,24 @@
 /*   By: dabochko <dabochko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:10:23 by dabochko          #+#    #+#             */
-/*   Updated: 2024/03/01 15:41:56 by dabochko         ###   ########.fr       */
+/*   Updated: 2024/03/12 11:29:41 by dabochko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-/* It takes a format string and a variable number of arguments. It uses
-va_start() to initialize an argument list args. Then, it goes through the
-format string character by character. If it finds a % character, it expects
-the next character to be a format specifier (c, s, or d in this case) and
-calls the corresponding function to write the next argument to standard
-output. If the character is not a %, it simply writes it to standard
-output. Finally, it uses va_end() to clean up args.*/
+//#include <stdio.h>
+//#include <stddef.h>
+
+/* Toma una cadena de formato y un número variable de argumentos.
+Utiliza	va_start(void) para inicializar una lista de argumentos args.
+Luego, recorre la cadena de formato carácter por carácter. Si
+encuentra un carácter %, espera que el siguiente carácter sea un
+especificador de formato (c, s o d en este caso) y llama a la
+función correspondiente para escribir el siguiente argumento en
+la salida estándar. Si el carácter no es un %, simplemente lo
+escribe en la salida estándar. Finalmente, utiliza
+va_end() para limpiar args.*/
 
 static int	ft_selector(va_list args, char const place)
 {
@@ -37,10 +42,11 @@ static int	ft_selector(va_list args, char const place)
 		size += ft_puthex(va_arg(args, unsigned int), place);
 	else if (place == 'p')
 	{
-		size += ft_putstr("0x");
-		size += ft_putptr(va_arg(args, unsigned long));
+		if (ft_putstr("0x") == -1)
+			return (-1);
+		size += 2 + ft_putptr(va_arg(args, unsigned long));
 	}
-	else
+	else if (place == '%')
 		size += ft_putchar(place);
 	return (size);
 }
@@ -59,25 +65,39 @@ int	ft_printf(const char *format, ...)
 	while (format[i])
 	{
 		if (format[i] == '%')
-		{
-			size = ft_selector(args, format[i + 1]);
-			i++;
-		}
+			size = ft_selector(args, format[++i]);
 		else
 			size = ft_putchar(format[i]);
 		if (size == -1)
 			return (-1);
+		if (format[i] != '\0')
+			i++;
 		size2 += size;
-		i++;
 	}
 	va_end(args);
 	return (size2);
 }
-
-/*int main(void) 
+/*
+int	main(void)
 {
-	int i;
-    i = ft_printf("hola %c %s %i %d %u %x %X", 'c', NULL, 547, -13, -1, 255, 255);
-	printf("\n%d\n", i);
-    return (0);
+	int	i;
+	int	i;
+	int	j;
+
+	i = ft_printf("hola %c %s %i %d %u %x %X %p%\0 57",\
+	'c', NULL, 547, -13, -1, 255, 255, &i);
+	//printf("\n%d\n", i);
+	ft_printf("%"); // '%' '\0' == 2
+	return (0);
 }*/
+/*
+int	main(void)
+{
+	i = printf ("%%%c%s%p%u%d%i%x%X\n",\
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	j = ft_printf ("%%%c%s%p%u%d%i%x%X\n",\
+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	printf("ORIGINAL %d\nMIO %d", i, j);
+	return ((0));
+}
+*/
