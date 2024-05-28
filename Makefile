@@ -3,33 +3,55 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dabochko <dabochko@student.42barcel>       +#+  +:+       +#+         #
+#    By: dabochko <dabochko@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/23 15:31:01 by dabochko          #+#    #+#              #
-#    Updated: 2024/03/08 14:14:01 by dabochko         ###   ########.fr        #
+#    Updated: 2024/05/28 14:31:38 by dabochko         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libftprintf.a
-SRC = ft_printf.c ft_putchar.c ft_putstr.c ft_putchar.c ft_putnbr.c\
-	ft_putstr.c ft_putunbr.c ft_putnbr.c ft_puthex.c ft_putptr.c
-OBJ = $(SRC:.c=.o)
-CFLAGS = -Wall -Werror -Wextra #-fsanitize=address
+CLIENT_NAME = client
 
-all: $(NAME)
+SERVER_NAME = server
 
-$(NAME): $(OBJ)
-	ar rcs $(NAME) $(OBJ)
 
-%.o:%.c Makefile ft_printf.h
-	gcc $(CFLAGS) -c $< -o $@ 
+CLIENT_SRCS = client.c ft_atoi.c
+
+SERVER_SRCS = server.c
+
+
+OBJS_CLIENT = $(CLIENT_SRCS:.c=.o)
+
+OBJS_SERVER = $(SERVER_SRCS:.c=.o)
+
+
+PRINTF = printf/libftprintf.a
+
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+
+all: $(CLIENT_NAME) $(SERVER_NAME)
+
+$(CLIENT_NAME): $(PRINTF) $(OBJS_CLIENT)
+	@$(CC) $(CFLAGS) $(OBJS_CLIENT) $(PRINTF) -o $(CLIENT_NAME)
+
+$(SERVER_NAME): $(PRINTF) $(OBJS_SERVER)
+	@$(CC) $(CFLAGS) $(OBJS_SERVER) $(PRINTF) -o $(SERVER_NAME)
+
+$(PRINTF):
+	@make -C printf
+
+%.o: %.c Makefile minitalk.h
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	@rm -f $(OBJS_CLIENT) $(OBJS_SERVER)
+	@make -C printf clean
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(CLIENT_NAME) $(SERVER_NAME)
+	@make -C printf fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all bonus clean fclean re

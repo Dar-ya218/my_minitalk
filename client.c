@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dabochko <dabochko@student.42barcel>       +#+  +:+       +#+        */
+/*   By: dabochko <dabochko@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 14:40:34 by dabochko          #+#    #+#             */
-/*   Updated: 2024/05/23 14:41:07 by dabochko         ###   ########.fr       */
+/*   Updated: 2024/05/28 14:26:12 by dabochko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char *argv[])
 	server_pid = ft_atoi(argv[1]);
 	message = argv[2];
 	i = 0;
-	while (message[i])
+	while (message[i] != '\0')
 	{
 		send_signal(server_pid, message[i]);
 		i++;
